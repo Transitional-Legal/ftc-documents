@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   extractEmploymentDataAsync,
+  findEmployerName,
   findEmploymentType,
   findNetEarnings,
   getPayPeriod,
@@ -24,9 +25,10 @@ const calculateExpenditure = (req) => {
   return result;
 };
 
-router.post("/employment", async (req, res) => {
+router.get("/employment", async (req, res) => {
   const payslip_data = await extractEmploymentDataAsync();
   const employmentType = findEmploymentType(payslip_data);
+  const name = findEmployerName(payslip_data);
 
   const netEarnings = findNetEarnings(payslip_data);
   console.log(netEarnings);
@@ -35,6 +37,7 @@ router.post("/employment", async (req, res) => {
   return res.json({
     employmentType,
     weekly_income,
+    name
   });
 });
 
@@ -104,13 +107,13 @@ router.post("/finstatement", async (req, res) => {
   // Part B: Financial summary
   const dollars = Intl.NumberFormat("en-AU");
 
-  // const payslip_data = await extractEmploymentDataAsync();
-  // const employmentType = findEmploymentType(payslip_data);
+  const payslip_data = await extractEmploymentDataAsync();
+  const employmentType = findEmploymentType(payslip_data);
 
   let employment_type_x = 104;
   let employment_type_y = 393;
 
-  const employment_type = req.body.employment_type || "full-time";
+  const employment_type = employmentType || "full-time";
   if (employment_type === "full-time") {
     employment_type_x = 104;
   }
@@ -119,12 +122,12 @@ router.post("/finstatement", async (req, res) => {
     employment_type_y = 410;
   }
 
-  // const netEarnings = findNetEarnings(payslip_data);
+  const netEarnings = findNetEarnings(payslip_data);
   // console.log(netEarnings);
-  // const weekly_income = netEarnings / getPayPeriod(payslip_data);
+  const weekly_income = netEarnings / getPayPeriod(payslip_data);
   // console.log(employmentType);
 
-  const weekly_income = req.body.weekly_income || 0;
+  // const weekly_income = req.body.weekly_income || 0;
   const personal = req.body.personal || 0;
   const property = req.body.property || 0;
   const superannuation = req.body.superannuation || 0;

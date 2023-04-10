@@ -77,7 +77,7 @@ const findEmployerName = (text) => {
   const regex = /Pay[-\s]Advice[-\s]From/i;
   const match = text.match(regex);
   if (match) {
-    const name = match[1].replace(/,/g, "");
+    name = match[0];
     name = name.trim();
   }
 
