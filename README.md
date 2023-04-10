@@ -13,8 +13,13 @@ The Family Court of Australia requires a financial statement to be filed with th
 * Family name: [96, 352]
 * Given name: [334, 352]
 
-
 ## Example
+
+To run the code as dev
+
+```bash
+yarn install && yarn dev
+```
 
 POST `/finstatement`
 
