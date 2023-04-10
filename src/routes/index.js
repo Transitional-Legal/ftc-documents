@@ -27,12 +27,6 @@ const calculateExpenditure = (req) => {
 router.post("/employment", async (req, res) => {
   const payslip_data = await extractEmploymentDataAsync();
   const employmentType = findEmploymentType(payslip_data);
-  
-  let ftx = 100;
-  
-  if (employmentType === "full-time") {
-    ftx = 100;
-  }
 
   const netEarnings = findNetEarnings(payslip_data);
   console.log(netEarnings);
@@ -112,7 +106,7 @@ router.post("/finstatement", async (req, res) => {
 
   // const payslip_data = await extractEmploymentDataAsync();
   // const employmentType = findEmploymentType(payslip_data);
-  
+
   let employment_type_x = 104;
   let employment_type_y = 393;
 
@@ -131,14 +125,47 @@ router.post("/finstatement", async (req, res) => {
   // console.log(employmentType);
 
   const weekly_income = req.body.weekly_income || 0;
+  const personal = req.body.personal || 0;
+  const property = req.body.property || 0;
+  const superannuation = req.body.superannuation || 0;
+  const liabilities = req.body.liabilities || 0;
+  const resources = req.body.resources || 0;
 
   pdfDoc
     .editPage(2)
-    .text(dollars.format(Number(weekly_income || 0)), 486, 116, {
+    .text(dollars.format(Number(weekly_income)), 486, 118, {
       color: "#000000",
       fontSize: 12,
       font: "Arial",
     })
+    .text(dollars.format(Number(personal)), 486, 137, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(dollars.format(Number(property)), 486, 156, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(dollars.format(Number(superannuation)), 486, 175, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(dollars.format(Number(liabilities)), 486, 194, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(dollars.format(Number(resources)), 486, 213, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .endPage();
+
+  pdfDoc
     // Employed
     .text("X", 102, 360, {
       color: "#000000",
@@ -146,6 +173,105 @@ router.post("/finstatement", async (req, res) => {
       font: "Arial",
     })
     .text("X", employment_type_x, employment_type_y, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .endPage();
+
+  // Part D: Your income
+  pdfDoc
+    .editPage(3)
+    // 9
+    .text(dollars.format(Number(weekly_income)), 500, 138, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // 10. Investment income (before tax)
+    .text("NIL", 500, 178, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("NIL", 500, 256, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // 11. Income from business / partnership / company / trust
+    .text("NIL", 500, 334, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .endPage();
+
+  // Part E: Other income earners in your household
+  pdfDoc
+    .editPage(4)
+    // 17
+    .text("0", 500, 112, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("0", 500, 144, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("0", 500, 176, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // Part F: Expenses paid by others for your benefit
+    // 18
+    .text("0", 500, 248, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("0", 500, 280, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("0", 500, 312, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .endPage();
+
+  // Part H: Personal expenses you pay for the benifits of others
+  pdfDoc
+    .editPage(6)
+    // 34
+    .text("NIL", 500, 106, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("NIL", 500, 162, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // 35
+    .text("NIL", 500, 250, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // 36
+    .text("NIL", 500, 336, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("NIL", 500, 400, {
       color: "#000000",
       fontSize: 12,
       font: "Arial",

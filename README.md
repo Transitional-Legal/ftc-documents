@@ -31,7 +31,14 @@ POST `/finstatement`
     "address": "123 Example Road",
     "state": "QLD",
     "postcode": "4000",
-    "password": "P@ssword!"
+    "witness": "Mr John Doe",
+    "weekly_income": 1100,
+    "employment": {
+        "weekly_income": 1100,
+        "employer": "Widgets Pty Ltd",
+        "address": "Head office"
+    },
+    "password": "P@ssw0rd"
 }
 ```
 
