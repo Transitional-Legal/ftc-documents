@@ -163,9 +163,6 @@ router.post("/finstatement", async (req, res) => {
       fontSize: 12,
       font: "Arial",
     })
-    .endPage();
-
-  pdfDoc
     // Employed
     .text("X", 102, 360, {
       color: "#000000",
@@ -177,8 +174,12 @@ router.post("/finstatement", async (req, res) => {
       fontSize: 12,
       font: "Arial",
     })
+    .endPage();
+
     // Part D: Your income
     // 9
+    pdfDoc
+    .editPage(3)
     .text(dollars.format(Number(weekly_income)), 500, 138, {
       color: "#000000",
       fontSize: 12,
