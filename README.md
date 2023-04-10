@@ -33,6 +33,11 @@ POST `/finstatement`
     "postcode": "4000",
     "witness": "Mr John Doe",
     "weekly_income": 1100,
+    "personal": 200,
+    "property": 500000,
+    "super": 100000,
+    "liabilities": 5000,
+    "resources": 0,
     "employment": {
         "weekly_income": 1100,
         "employer": "Widgets Pty Ltd",

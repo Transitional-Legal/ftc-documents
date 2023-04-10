@@ -177,11 +177,7 @@ router.post("/finstatement", async (req, res) => {
       fontSize: 12,
       font: "Arial",
     })
-    .endPage();
-
-  // Part D: Your income
-  pdfDoc
-    .editPage(3)
+    // Part D: Your income
     // 9
     .text(dollars.format(Number(weekly_income)), 500, 138, {
       color: "#000000",
