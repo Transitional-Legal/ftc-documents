@@ -43,11 +43,12 @@ router.get("/employment", async (req, res) => {
 
 router.post("/finstatement", async (req, res) => {
   const name = `${req.body.given_name} ${req.body.family_name}`;
+  const filename = `${req.body.given_name}-${req.body.family_name}_Financial_Statement.pdf`;
 
   // Output file name a UUID
   const pdfDoc = new Recipe(
     "Financial_Statement_FORM_0921V1.pdf",
-    "output.pdf"
+    filename
   );
 
   // Family Court of Australia requires 12pt font https://www.fedcourt.gov.au/online-services/preparing-documents-for-the-court#:~:text=Font%20size%2C%20colour%20and%20type&text=The%20font%20size%20for%20Federal,such%20as%20blue%20and%20red.
@@ -107,8 +108,8 @@ router.post("/finstatement", async (req, res) => {
   // Part B: Financial summary
   const dollars = Intl.NumberFormat("en-AU");
 
-  const payslip_data = await extractEmploymentDataAsync();
-  const employmentType = findEmploymentType(payslip_data);
+  // const payslip_data = await extractEmploymentDataAsync();
+  const employmentType = "full-time"; // = findEmploymentType(payslip_data);
 
   let employment_type_x = 104;
   let employment_type_y = 393;
@@ -122,18 +123,29 @@ router.post("/finstatement", async (req, res) => {
     employment_type_y = 410;
   }
 
-  const netEarnings = findNetEarnings(payslip_data);
+  // const netEarnings = findNetEarnings(payslip_data);
   // console.log(netEarnings);
-  const weekly_income = netEarnings / getPayPeriod(payslip_data);
+  // const weekly_income = netEarnings / getPayPeriod(payslip_data);
   // console.log(employmentType);
 
-  // const weekly_income = req.body.weekly_income || 0;
+  const weekly_income = req.body.weekly_income || 0;
   const personal = req.body.personal || 0;
   const property = req.body.property || 0;
   const superannuation = req.body.superannuation || 0;
   const liabilities = req.body.liabilities || 0;
   const resources = req.body.resources || 0;
 
+  const occupation = {
+    position: "Sales Manager",
+    employer: "Place Graceville",
+    address: "389 Honour Ave, Graceville",
+    phone: "07 3379 4311",
+    state: "QLD",
+    postcode: "4075",
+    duration: 1,
+  };
+
+  // Part C: Your employment details
   pdfDoc
     .editPage(2)
     .text(dollars.format(Number(weekly_income)), 486, 118, {
@@ -166,13 +178,66 @@ router.post("/finstatement", async (req, res) => {
       fontSize: 12,
       font: "Arial",
     })
-    // Employed
+    // 3. What is your current position?
+    .text(occupation.position, 102, 288, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // 4. Are you employed?
     .text("X", 102, 360, {
       color: "#000000",
       fontSize: 12,
       font: "Arial",
     })
     .text("X", employment_type_x, employment_type_y, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(occupation.employer, 102, 452, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(occupation.address, 102, 500, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(occupation.state, 136, 520, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(occupation.postcode, 330, 520, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text(occupation.phone, 470, 520, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // 7. How long have you been employed at this place?
+    .text(occupation.duration, 366, 552, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("0", 446, 552, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    .text("0", 530, 552, {
+      color: "#000000",
+      fontSize: 12,
+      font: "Arial",
+    })
+    // 8. Are you self-employed?
+    .text("X", 102, 596, {
       color: "#000000",
       fontSize: 12,
       font: "Arial",
