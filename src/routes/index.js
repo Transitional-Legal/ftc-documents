@@ -15,6 +15,7 @@ router.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// move to a module / class
 // TODO: Get this from bank statement
 const calculateExpenditure = (req) => {
   const result = {
@@ -24,6 +25,20 @@ const calculateExpenditure = (req) => {
 
   return result;
 };
+
+router.post("/subpoena", async (req, res) => {
+  const name = `${req.body.given_name} ${req.body.family_name}`;
+
+  const date = new Date();
+
+  // TODO: Add YYYY-MM-DD to filename
+  const filename = `${req.body.given_name}-${req.body.family_name}_Financial_Statement.pdf`;
+
+  const pdfDoc = new Recipe(
+    "src/templates/subpoena_familylaw_0723v1.pdf",
+    filename
+  );
+});
 
 router.get("/employment", async (req, res) => {
   const payslip_data = await extractEmploymentDataAsync();
@@ -43,11 +58,14 @@ router.get("/employment", async (req, res) => {
 
 router.post("/finstatement", async (req, res) => {
   const name = `${req.body.given_name} ${req.body.family_name}`;
+
+  const date = new Date();
+
+  // TODO: Add YYYY-MM-DD to filename
   const filename = `${req.body.given_name}-${req.body.family_name}_Financial_Statement.pdf`;
 
-  // Output file name a UUID
   const pdfDoc = new Recipe(
-    "Financial_Statement_FORM_0921V1.pdf",
+    "src/templates/Financial_Statement_FORM_0921V1.pdf",
     filename
   );
 
